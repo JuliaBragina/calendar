@@ -22,7 +22,7 @@ class EventsApi {
 
   addEvent(data) { 
     ///events?name=dummy&start=2006-01-02T15:04:05Z&stop=2006-01-02T15:05:05Z
-    return fetch (this._url + `/events?name=${data.name}&start=${data.startDate}T${data.startTime}Z&stop=${data.endDate}T${data.endTime}Z`, {
+    return fetch (this._url + data, {
       method: 'PUT',
       credentials: 'include',
       headers: this._headers,
@@ -41,9 +41,10 @@ class EventsApi {
 
 
 const mainApi = new EventsApi({
-  url: 'https://mycalendar.space',
+  url: 'https://api.mycalendar.space',
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Origin": "http://localhost:3000"
   }
 });
 

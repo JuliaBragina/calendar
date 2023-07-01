@@ -10,6 +10,7 @@ import eventsApi from '../utils/EventsApi';
 import mainApi from '../utils/MainApi';
 import ProtectedRoute from './ProtectedRoute'
 import { CurrenUserContext } from '../contexts/CurrentUserContext';
+import consistentTypeSpecifierStyle from 'eslint-plugin-import/lib/rules/consistent-type-specifier-style';
 
 function App() {  
   let now = new Date();
@@ -65,10 +66,18 @@ function App() {
     }
     eventsApi.getAllEvents(periodTime)
     .then((events) => {
-      setEvents(events);
+      setEvents(checkTimeZone(events));
       localStorage.setItem('events', JSON.stringify(events));
     })
     .catch((err) => alert(err));
+  }
+
+  function checkTimeZone(events) {
+    events.map((event) => {
+      event.start = new Date(event.start);
+      event.stop = new Date(event.stop);
+    });
+    return (events);
   }
 
   function getCurrentWeek(nowDayNumber, nowDay) {
@@ -96,10 +105,9 @@ function App() {
     setAddEvent(false);
   }
 
-  function handlerChooseEvent(numberElem, event) {
-    console.log(event, event[numberElem])
+  function handlerChooseEvent(event, i) {
     setChoosenEvent(event);
-    setNumberChoosenEvent(numberElem);
+    setNumberChoosenEvent(i);
     setDeleteEvent(true);
   }
 
@@ -115,18 +123,20 @@ function App() {
   }
 
   function handlerAddEvent(event) {
-    const eventSplit = event.event.split(' ');
-    const objEvent = {
-      name: eventSplit[0],
-      startDate: eventSplit[1],
-      startTime: eventSplit[2],
-      endDate: eventSplit[3],
-      endTime: eventSplit[4]
-    }
+    console.log(event);
 
-    eventsApi.addEvent(objEvent)
+    let eventTimeZoneStart = new Date(event.eventDayStart + 'T' + event.eventTimeStart + ':00');
+    let eventTimeZoneStop = new Date(event.eventDayStart + 'T' + event.eventTimeStop + ':00');
+
+    let myStartDate = new Date(eventTimeZoneStart).toISOString();
+    let myStopDate = new Date(eventTimeZoneStop).toISOString();
+
+    let newEvent = `/events?name=${event.eventText}&start=${myStartDate.split('.')[0]}Z&stop=${myStopDate.split('.')[0]}Z`;
+
+    eventsApi.addEvent(newEvent)
     .then((newEvent) => {
-      setEvents([newEvent, ...isEvents]);
+      //setEvents([newEvent, ...isEvents]);
+      getEvents();
       setAddEvent(false);
     })
     .catch(err => alert(err))

@@ -9,7 +9,7 @@ const AddEventPopupContainer = styled.div`
   transform: translate(-50%, -50%);
 
   width: 80%;
-  height: 20%;
+  height: 28%;
 `
 const AddEventPopupFrom = styled.form`
 width: 100%;
@@ -24,18 +24,33 @@ font-size: 20px;
 line-height: 22px;
 margin: 0;
 text-align: center;
-padding-top: 15px;
+padding: 15px;
+`
+const AddEventPopupFromContainer = styled.div`
+display: flex;
+justify-content: space-between;
+flex-direction: column;
+height: 60%;
+`
+const AddEventPopupSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
 `
 const AddEventPopupDescription = styled.p`
 margin: 0;
-padding-top: 10px;
-text-align: center;
+flex-basis: 20%;
+`
+const AddEventPopupDescriptionPeriodTime = styled.div`
+display:flex;
+
 `
 const AddEventPopupFromInput = styled.input`
-width: 85%;
+width: 80%;
 display: block;
 margin: 0 auto;
-margin-top: 20px;
 `
 const AddEventPopupButtons = styled.div`
 margin-top: 15px;
@@ -74,30 +89,88 @@ box-sizing: border-box;
 }
 `
 function AddEventPopup({isOpen, onClose, onAddEvent}) {
-  const [event, setEvent] = useState('');
+  const [eventText, setEventText] = useState('');
+  const [eventDayStart, setventDayStart] = useState('');
+  const [eventTimeStart, setEventTimeStart] = useState('');
+  const [eventTimeStop, setEventTimeStop] = useState('');
 
   function handlerChangeName(e) {
-    setEvent(e.target.value);
+    setEventText(e.target.value);
+  }
+
+  function handlerChangeDayStart(e) {
+    setventDayStart(e.target.value);
+  }
+
+  function handlerChangeTimeStart(e) {
+    setEventTimeStart(e.target.value);
+  }
+
+  function handlerChangeTimeStop(e) {
+    setEventTimeStop(e.target.value);
   }
 
   function handleSubmitFrom(e) {
     e.preventDefault();
-    onAddEvent({event});
+    onAddEvent({eventText, eventDayStart, eventTimeStart, eventTimeStop});
   }
 
   return(
     <AddEventPopupContainer isOpen={isOpen}>
       <AddEventPopupFrom name='addEventPopup-form' onSubmit={handleSubmitFrom} noValidate>
-        <AddEventPopupTitle >https://calendar.com</AddEventPopupTitle>
-        <AddEventPopupDescription >Enter Event time:</AddEventPopupDescription>
-        <AddEventPopupDescription >YYYY-MM-DD HH:mm:ss</AddEventPopupDescription>
-        <AddEventPopupFromInput 
-          type="text"
-          name="text"
-          autoComplete="off"
-          value={event || ""}
-          onChange={handlerChangeName}
-          required />
+        <AddEventPopupTitle >Enter your event</AddEventPopupTitle>
+
+          <AddEventPopupFromContainer>
+            <AddEventPopupSection>
+              <AddEventPopupDescription >Enter descr</AddEventPopupDescription>
+              <AddEventPopupFromInput 
+                type="text"
+                name="text"
+                autoComplete="off"
+                value={eventText || ""}
+                onChange={handlerChangeName}
+                required />
+            </AddEventPopupSection>
+
+            <AddEventPopupSection>
+              <AddEventPopupDescription >Enter day</AddEventPopupDescription>
+              <AddEventPopupFromInput 
+                type="date"
+                name="startDay"
+                autoComplete="off"
+                value={eventDayStart || ""}
+                onChange={handlerChangeDayStart}
+                required />
+            </AddEventPopupSection>
+
+            <AddEventPopupDescription >Enter period of time</AddEventPopupDescription>
+            <AddEventPopupDescriptionPeriodTime>
+              <AddEventPopupSection>
+              <AddEventPopupDescription >from</AddEventPopupDescription>
+                <AddEventPopupFromInput 
+                  type="time"
+                  name="timeStart"
+                  autoComplete="off"
+                  value={eventTimeStart || ""}
+                  onChange={handlerChangeTimeStart}
+                  required />
+              </AddEventPopupSection>
+
+              <AddEventPopupSection>
+                <AddEventPopupDescription >to</AddEventPopupDescription>
+                <AddEventPopupFromInput 
+                  type="time"
+                  name="startTime"
+                  autoComplete="off"
+                  value={eventTimeStop || ""}
+                  onChange={handlerChangeTimeStop}
+                  required />
+              </AddEventPopupSection>
+            </AddEventPopupDescriptionPeriodTime>
+
+          </AddEventPopupFromContainer>
+        
+
         <AddEventPopupButtons>
           <AddEventPopupButtonsCancel type="button" onClick={onClose}>Cancel</AddEventPopupButtonsCancel>
           <AddEventPopupButtonsOk type="submit">OK</AddEventPopupButtonsOk>

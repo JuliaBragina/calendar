@@ -47,7 +47,7 @@ class MainApi {
 }
 
 const mainApi = new MainApi({
-  url: 'https://mycalendar.space',
+  url: 'https://api.mycalendar.space',
   headers: {
     "Content-Type": "application/json",
     "Origin": "http://localhost:3000"

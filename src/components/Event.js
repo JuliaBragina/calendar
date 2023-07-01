@@ -51,7 +51,7 @@ function Event({ event, onDeleteEvent }) {
     ? <EventItem></EventItem>
     : <EventItem type='submit'>
         {
-          makeObj().map((item) => <EventItemIsEvent key={item.id} onClick={_ => onDeleteEvent(item, event)}></EventItemIsEvent>)
+          makeObj().map((item, i) => <EventItemIsEvent key={item.id} onClick={_ => onDeleteEvent(event, i)}></EventItemIsEvent>)
         }
       </EventItem>
   );
