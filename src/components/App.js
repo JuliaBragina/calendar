@@ -10,7 +10,6 @@ import eventsApi from '../utils/EventsApi';
 import mainApi from '../utils/MainApi';
 import ProtectedRoute from './ProtectedRoute'
 import { CurrenUserContext } from '../contexts/CurrentUserContext';
-import consistentTypeSpecifierStyle from 'eslint-plugin-import/lib/rules/consistent-type-specifier-style';
 
 function App() {  
   let now = new Date();
@@ -22,7 +21,7 @@ function App() {
   const [numberChoosenEvent, setNumberChoosenEvent] = useState(0);
   const [isLoading, setLoading] = useState(false);
   const [currenUser, setCurrentUser] = useState({});  
-  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn').toLowerCase() === 'true' : false);
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn').toLowerCase() == 'true' : false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,17 +32,24 @@ function App() {
     if (loggedIn) {
       mainApi.getMe()
         .then(user => {
-          setCurrentUser(user);
-          getEvents();
+          if(user) {
+            setCurrentUser(user);
+          }
         })
-        .catch(err => console.log('err'));
+        .catch(err => setLoggedIn(false));
     } else {
       navigate('/sign-in');
       setCurrentUser({});
       setCurrentWeek({});
-      localStorage.clear();
+      setLoggedIn(false);
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    if(loggedIn && currenUser && isCurrentWeek.length !== 0) {
+      getEvents();
+    }
+  }, [loggedIn])
 
   useEffect(() => {
     localStorage.setItem('events', JSON.stringify(isEvents));
@@ -56,20 +62,19 @@ function App() {
   }, [isCurrentWeek]);
 
   function getEvents() {
-    let dateStart = new Date(isCurrentWeek[0]);
-    let dateEnd = new Date(isCurrentWeek[6]);
     const periodTime = {
-      startDate: dateStart.toISOString().split('T')[0],
       startTime: '00:00:01',
-      endDate: dateEnd.toISOString().split('T')[0],
       endTime: '23:59:59'
     }
-    eventsApi.getAllEvents(periodTime)
+    let time = `/events?start=${isCurrentWeek[0].toISOString().split('T')[0]}T${periodTime.startTime}Z&stop=${isCurrentWeek[6].toISOString().split('T')[0]}T${periodTime.endTime}Z`;
+    eventsApi.getAllEvents(time)
     .then((events) => {
-      setEvents(checkTimeZone(events));
-      localStorage.setItem('events', JSON.stringify(events));
+      if(events.length !== 0) {
+        setEvents(checkTimeZone(events));
+        localStorage.setItem('events', JSON.stringify(events));
+      }
     })
-    .catch((err) => alert(err));
+    .catch((err) => console.log(err));
   }
 
   function checkTimeZone(events) {
@@ -118,7 +123,10 @@ function App() {
         setEvents(events => events.filter(event => event.id != choosenEvent[numberChoosenEvent].id));
         setDeleteEvent(false);
       })
-      .catch(err => alert(err));
+      .catch(err => {
+        alert(err);
+        alert('130');
+      });
     }
   }
 
@@ -135,53 +143,72 @@ function App() {
 
     eventsApi.addEvent(newEvent)
     .then((newEvent) => {
-      //setEvents([newEvent, ...isEvents]);
       getEvents();
       setAddEvent(false);
     })
-    .catch(err => alert(err))
+    .catch(err =>{
+      alert(err);
+      alert('150');
+    })
   }
 
   function handleLoginUser(data) {
     mainApi.login(data.login, data.pass)
     .then((newUser) => {
-      if (newUser) {
+      if(newUser) {
         setLoggedIn(true);
         setCurrentWeek(getCurrentWeek(now.getDay(), now));
         localStorage.setItem("loggedIn", true);
         navigate('/');
       } else {
-        alert('токена нет');
-        setLoggedIn(false);
-        localStorage.setItem("loggedIn", false)
-        setCurrentWeek({});
+        handleError('токена нет');
       }
     })
-    .catch((err) => alert(err));
+    .catch((err) => {
+      alert(err);
+      alert('170');
+    });
   }
   
   function handleRegisterUser(data) {
     mainApi.register(data.name, data.login, data.pass)
-    .then(() => {
-      mainApi.getMe()
-      .then((user) => handleLoginUser(data))
-      .catch((err) => alert(err))
-    })
-    .catch((err) => alert(err));
+      .then((newUser) => {
+        if (newUser) {
+          handleLoginUser(data);
+        } else {
+          handleError('токена нет');
+        }
+      })
+      .catch((err) => {
+        alert(err);
+        alert('188');
+      });
   }
+  
 
   function handlerLogOut() {
     mainApi.logout()
     .then((res) => {
       navigate('/sign-in');
       setLoggedIn(false);
+      console.log(loggedIn);
       setCurrentUser({});
       setCurrentWeek({});
-      localStorage.clear();
+      localStorage.setItem("loggedIn", false);
     })
     .catch((err) => {
-      console.log(err);
+      alert(err);
+      alert('205');
     });
+  }
+
+  function handleError(error) {
+    alert(error, '196');
+    console.log('196')
+    setLoggedIn(false);
+    console.log(loggedIn);
+    setCurrentWeek({});
+    localStorage.setItem("loggedIn", false);
   }
 
   function setPrevWeek() {
@@ -191,29 +218,28 @@ function App() {
   function setNextWeek() {
     setCurrentWeek(isCurrentWeek.map(day => addDays(7, day)));
   }
-  //<Route element={<ProtectedRoute loggedIn={loggedIn} />}></Route>
 
   return (
     <CurrenUserContext.Provider value={currenUser}>
       <div className="app">
         <Routes>
-          <Route path='/' element={(
-            <>
-              <Header onEddEvent={handlerAddEventOpen} onLogOut={handlerLogOut} />
-              <Main
-                onDeleteEvent={handlerChooseEvent}
-                currentDay={now.getDate()}
-                currentWeek={isCurrentWeek}
-                events={isEvents}
-                onSetPrevWeek={setPrevWeek}
-                onSetNextWeek={setNextWeek} />
-              <Footer onDeleteEventFooter={handleDeleteEvent} isShowDeleteButton={isDeleteEvent} />
-            </>)}>
-          </Route>
-
           <Route path='/sign-in' element={<Login onLoginUser={handleLoginUser} onLoading={isLoading} />}></Route>
           <Route path='/sign-up' element={<Register onRegisterUser={handleRegisterUser} />}></Route>
-
+          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route path='/' element={(
+              <>
+                <Header onEddEvent={handlerAddEventOpen} onLogOut={handlerLogOut} />
+                <Main
+                  onDeleteEvent={handlerChooseEvent}
+                  currentDay={now.getDate()}
+                  currentWeek={isCurrentWeek}
+                  events={isEvents}
+                  onSetPrevWeek={setPrevWeek}
+                  onSetNextWeek={setNextWeek} />
+                <Footer onDeleteEventFooter={handleDeleteEvent} isShowDeleteButton={isDeleteEvent} />
+              </>)}>
+            </Route>
+          </Route>
         </Routes>
 
         <AddEventPopup onClose={handlerCancelEventClose} onAddEvent={handlerAddEvent} isOpen={isAddEvent}/>

@@ -12,8 +12,7 @@ class EventsApi {
   }
 
   getAllEvents(periodTime) {
-    ///events?start=2006-01-02T15:04:05Z&stop=2006-01-02T15:04:05Z
-    return fetch (this._url + `/events?start=${periodTime.startDate}T${periodTime.startTime}Z&stop=${periodTime.endDate}T${periodTime.endTime}Z`, {
+    return fetch (this._url + periodTime, {
       method: 'GET', 
       credentials: 'include',
       headers: this._headers,
@@ -21,7 +20,6 @@ class EventsApi {
   }
 
   addEvent(data) { 
-    ///events?name=dummy&start=2006-01-02T15:04:05Z&stop=2006-01-02T15:05:05Z
     return fetch (this._url + data, {
       method: 'PUT',
       credentials: 'include',

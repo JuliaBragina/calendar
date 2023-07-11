@@ -42,15 +42,48 @@ const AddEventPopupSection = styled.section`
 const AddEventPopupDescription = styled.p`
 margin: 0;
 flex-basis: 20%;
+font-family: 'Inter', Arial, sans-serif;
+font-weight: 400;
+font-size: 14px;
+line-height: 14px;
+margin: 0;
+`
+const AddEventPopupDescriptionTitle = styled.h3`
+font-family: 'Inter', Arial, sans-serif;
+font-weight: 400;
+font-size: 16px;
+line-height: 16px;
+margin: 0 auto;
+width: 90%;
 `
 const AddEventPopupDescriptionPeriodTime = styled.div`
-display:flex;
-
+display: flex;
+width: 90%;
+margin: 0 auto;
 `
 const AddEventPopupFromInput = styled.input`
 width: 80%;
 display: block;
 margin: 0 auto;
+font-family: 'Inter', Arial, sans-serif;
+font-weight: 400;
+font-size: 12px;
+line-height: 12px;
+
+`
+const AddEventPopupFromInputTime = styled.input`
+width: 80%;
+display: block;
+margin: 0 auto;
+font-family: 'Inter', Arial, sans-serif;
+font-weight: 400;
+font-size: 12px;
+line-height: 12px;
+margin-right: 20px;
+
+&:last-of-type{
+  margin-right: 0;
+}
 `
 const AddEventPopupButtons = styled.div`
 margin-top: 15px;
@@ -143,31 +176,31 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
                 required />
             </AddEventPopupSection>
 
-            <AddEventPopupDescription >Enter period of time</AddEventPopupDescription>
+            <AddEventPopupDescriptionTitle >Enter period of time</AddEventPopupDescriptionTitle>
+
             <AddEventPopupDescriptionPeriodTime>
               <AddEventPopupSection>
-              <AddEventPopupDescription >from</AddEventPopupDescription>
-                <AddEventPopupFromInput 
-                  type="time"
-                  name="timeStart"
-                  autoComplete="off"
-                  value={eventTimeStart || ""}
-                  onChange={handlerChangeTimeStart}
-                  required />
+                <AddEventPopupDescription >from</AddEventPopupDescription>
+                  <AddEventPopupFromInputTime 
+                    type="time"
+                    name="timeStart"
+                    autoComplete="off"
+                    value={eventTimeStart || ""}
+                    onChange={handlerChangeTimeStart}
+                    required />
               </AddEventPopupSection>
 
               <AddEventPopupSection>
                 <AddEventPopupDescription >to</AddEventPopupDescription>
-                <AddEventPopupFromInput 
-                  type="time"
-                  name="startTime"
-                  autoComplete="off"
-                  value={eventTimeStop || ""}
-                  onChange={handlerChangeTimeStop}
-                  required />
+                  <AddEventPopupFromInputTime 
+                    type="time"
+                    name="startTime"
+                    autoComplete="off"
+                    value={eventTimeStop || ""}
+                    onChange={handlerChangeTimeStop}
+                    required />
               </AddEventPopupSection>
             </AddEventPopupDescriptionPeriodTime>
-
           </AddEventPopupFromContainer>
         
 
