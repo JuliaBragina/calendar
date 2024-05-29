@@ -12,10 +12,10 @@ const EventItem = styled.div`
 const EventItemIsEvent = styled.div`
   cursor: pointer;
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: ${props => props.top}%;;
   left: ${props => props.left}%;
   width: ${props => props.width}%;
+  height: ${props => props.height}%;
   box-sizing: border-box;
 
   &::before {
@@ -47,20 +47,22 @@ const EventItemIsEventText = styled.p`
 `;
 
 function Event({ event, onDeleteEvent }) {
-  const eventCount = Object.keys(event).length - 1;
+  const eventCount = Object.keys(event.events).length;
   const eventWidth = 100 / eventCount;
 
   function handleDeleteEvent(i) {
-    onDeleteEvent(event, i);
+    onDeleteEvent(event.events, i);
   }
 
   function makeObj() {
     let massEvents = [];
-    for(let i = 0; i < Object.keys(event).length - 1; i++) {
-      massEvents.push(event[i]);
+    for(let i = 0; i < Object.keys(event.events).length; i++) {
+      massEvents.push(event.events[i]);
     }
     return massEvents;
   }
+
+  //height={100 - item.start.toISOString().split(':')[1] * 100 / 60}
 
   return (
     <EventItem>
@@ -71,6 +73,7 @@ function Event({ event, onDeleteEvent }) {
           <EventItemIsEvent
             key={item.id}
             left={eventWidth * i}
+            top={0}
             width={eventWidth}
             onClick={() => handleDeleteEvent(i)}
           >

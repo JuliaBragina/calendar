@@ -131,8 +131,6 @@ function App() {
   }
 
   function handlerAddEvent(event) {
-    console.log(event);
-
     let eventTimeZoneStart = new Date(event.eventDayStart + 'T' + event.eventTimeStart + ':00');
     let eventTimeZoneStop = new Date(event.eventDayStart + 'T' + event.eventTimeStop + ':00');
 
