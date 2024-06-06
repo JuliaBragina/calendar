@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 import leftButton from '../images/left-button.svg';
 import rightButton from '../images/rigth-button.svg';
+
 
 const Weekline = styled.section`
   max-width: 100%;
@@ -52,7 +54,7 @@ const WeelKineDayIsBif = styled.p`
     font-weight: 500;
     font-size: 18px;
     line-height: 20px;
-    color: ${props => (props.day === props.currentDay && props.month === props.currentMonth)  ? 'white' : 'black'}
+    color: ${props => (props.$day === props.$currentDay && props.$month === props.$currentMonth)  ? 'white' : 'black'}
 `
 const WeekLineDayIsCurrent = styled.div`
   position: absolute;
@@ -80,7 +82,7 @@ const WeekLineMonth = styled.div`
 `
 const WeekLineButtonLeft = styled.button`
   padding: 0;
-  background-image: url('${props => props.url}');
+  background-image: url('${props => props.$url}');
   background-position:  center;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -138,7 +140,7 @@ function WeekLine ({ currentDay, currentWeek, onSetPrevWeek, onSetNextWeek }) {
         </WeekLineWeek>
         <WeekLineWeek>
           {
-            currentWeek.map((day) => <WeelKineDayIsBif key={day.getDate()} day={day.getDate()} month={day.getMonth()} currentMonth={now.getMonth()} currentDay={currentDay}>{day.getDate()}
+            currentWeek.map((day) => <WeelKineDayIsBif key={day.getDate()} $day={day.getDate()} $month={day.getMonth()} $currentMonth={now.getMonth()} $currentDay={currentDay}>{day.getDate()}
             {
               (day.getDate() === currentDay) && (day.getMonth() === now.getMonth()) && <WeekLineDayIsCurrent></WeekLineDayIsCurrent>
             }
@@ -146,9 +148,9 @@ function WeekLine ({ currentDay, currentWeek, onSetPrevWeek, onSetNextWeek }) {
           }
         </WeekLineWeek>
         <WeekLineMonth>
-          <WeekLineButtonLeft url={leftButton} type='click' onClick={onSetPrevWeek}></WeekLineButtonLeft>
+          <WeekLineButtonLeft $url={leftButton} type='click' onClick={onSetPrevWeek}></WeekLineButtonLeft>
           <WeekLineNameMonth>{months[isCurrentMonth]}</WeekLineNameMonth>
-          <WeekLineButtonLeft url={rightButton} type='click'onClick={onSetNextWeek}></WeekLineButtonLeft>
+          <WeekLineButtonLeft $url={rightButton} type='click' onClick={onSetNextWeek}></WeekLineButtonLeft>
         </WeekLineMonth>
       </WeekLineContainer>
     </Weekline>

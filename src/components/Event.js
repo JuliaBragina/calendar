@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 
 const EventItem = styled.div`
@@ -12,10 +12,10 @@ const EventItem = styled.div`
 const EventItemIsEvent = styled.div`
   cursor: pointer;
   position: absolute;
-  top: ${props => props.top}%;;
-  left: ${props => props.left}%;
-  width: ${props => props.width}%;
-  height: ${props => props.height}%;
+  top: ${props => props.$top}%;;
+  left: ${props => props.$left}%;
+  width: ${props => props.$width}%;
+  height: ${props => props.$height}%;
   box-sizing: border-box;
 
   &::before {
@@ -72,9 +72,9 @@ function Event({ event, onDeleteEvent }) {
         makeObj().map((item, i) => (
           <EventItemIsEvent
             key={item.id}
-            left={eventWidth * i}
-            top={0}
-            width={eventWidth}
+            $left={eventWidth * i}
+            $top={0}
+            $width={eventWidth}
             onClick={() => handleDeleteEvent(i)}
           >
             <EventItemIsEventText>{item.name}</EventItemIsEventText>

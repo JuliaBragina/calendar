@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import TimeLine from './TimeLine';
 import WeekLine from './WeekLine';
 

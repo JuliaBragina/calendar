@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import * as React from 'react';
 import styled from "styled-components";
 
 const AddEventPopupContainer = styled.div`
-  display: ${(props) => props.isOpen ? 'block' : 'none'};
+  display: ${(props) => props.$isOpen ? 'block' : 'none'};
   position: absolute;
   top: 30%;
   left: 50%;
@@ -149,7 +150,7 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
   }
 
   return(
-    <AddEventPopupContainer isOpen={isOpen}>
+    <AddEventPopupContainer $isOpen={isOpen}>
       <AddEventPopupFrom name='addEventPopup-form' onSubmit={handleSubmitFrom} noValidate>
         <AddEventPopupTitle >Enter your event</AddEventPopupTitle>
 

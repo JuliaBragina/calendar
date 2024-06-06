@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from './Header';
 import Main from './Main';
@@ -40,41 +41,39 @@ function App() {
     } else {
       navigate('/sign-in');
       setCurrentUser({});
-      setCurrentWeek({});
       setLoggedIn(false);
     }
   }, [loggedIn]);
 
   useEffect(() => {
-    if(loggedIn && currenUser && isCurrentWeek.length !== 0) {
+    if (loggedIn && currenUser && isCurrentWeek.length !== 0) {
       getEvents();
     }
-  }, [loggedIn])
+  }, [loggedIn, currenUser, isCurrentWeek]);
 
   useEffect(() => {
     localStorage.setItem('events', JSON.stringify(isEvents));
   }, [isEvents]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if(isCurrentWeek.length !== 0 && loggedIn) {
       getEvents();
     }
-  }, [isCurrentWeek]);
+  }, [isCurrentWeek]);*/
 
   function getEvents() {
     const periodTime = {
       startTime: '00:00:01',
       endTime: '23:59:59'
-    }
+    };
     let time = `/events?start=${isCurrentWeek[0].toISOString().split('T')[0]}T${periodTime.startTime}Z&stop=${isCurrentWeek[6].toISOString().split('T')[0]}T${periodTime.endTime}Z`;
     eventsApi.getAllEvents(time)
-    .then((events) => {
-      if(events.length !== 0) {
-        setEvents(checkTimeZone(events));
+      .then((events) => {
+        const filteredEvents = checkTimeZone(events.filteredEvents);
+        setEvents(filteredEvents);
         localStorage.setItem('events', JSON.stringify(events));
-      }
-    })
-    .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   }
 
   function checkTimeZone(events) {
@@ -83,6 +82,24 @@ function App() {
       event.stop = new Date(event.stop);
     });
     return (events);
+  }
+
+  function handleLoginUser(data) {
+    mainApi.login(data.login, data.pass)
+    .then((newUser) => {
+      if(newUser) {
+        setLoggedIn(true);
+        setCurrentWeek(getCurrentWeek(now.getDay(), now));
+        localStorage.setItem("loggedIn", true);
+        navigate('/');
+      } else {
+        handleError('токена нет');
+      }
+    })
+    .catch((err) => {
+      alert(err);
+      alert('170');
+    });
   }
 
   function getCurrentWeek(nowDayNumber, nowDay) {
@@ -104,68 +121,7 @@ function App() {
 
   function handlerAddEventOpen() {
     setAddEvent(true);
-  }
-
-  function handlerCancelEventClose() {
-    setAddEvent(false);
-  }
-
-  function handlerChooseEvent(event, i) {
-    setChoosenEvent(event);
-    setNumberChoosenEvent(i);
-    setDeleteEvent(true);
-  }
-
-  function handleDeleteEvent(status) {
-    if(status) {
-      eventsApi.deletEvent(choosenEvent[numberChoosenEvent].id)
-      .then(() => {
-        setEvents(events => events.filter(event => event.id != choosenEvent[numberChoosenEvent].id));
-        setDeleteEvent(false);
-      })
-      .catch(err => {
-        alert(err);
-        alert('130');
-      });
-    }
-  }
-
-  function handlerAddEvent(event) {
-    let eventTimeZoneStart = new Date(event.eventDayStart + 'T' + event.eventTimeStart + ':00');
-    let eventTimeZoneStop = new Date(event.eventDayStart + 'T' + event.eventTimeStop + ':00');
-
-    let myStartDate = new Date(eventTimeZoneStart).toISOString();
-    let myStopDate = new Date(eventTimeZoneStop).toISOString();
-
-    let newEvent = `/events?name=${event.eventText}&start=${myStartDate.split('.')[0]}Z&stop=${myStopDate.split('.')[0]}Z`;
-
-    eventsApi.addEvent(newEvent)
-    .then((newEvent) => {
-      getEvents();
-      setAddEvent(false);
-    })
-    .catch(err =>{
-      alert(err);
-      alert('150');
-    })
-  }
-
-  function handleLoginUser(data) {
-    mainApi.login(data.login, data.pass)
-    .then((newUser) => {
-      if(newUser) {
-        setLoggedIn(true);
-        setCurrentWeek(getCurrentWeek(now.getDay(), now));
-        localStorage.setItem("loggedIn", true);
-        navigate('/');
-      } else {
-        handleError('токена нет');
-      }
-    })
-    .catch((err) => {
-      alert(err);
-      alert('170');
-    });
+    console.log('vdvvdr')
   }
   
   function handleRegisterUser(data) {
@@ -182,31 +138,18 @@ function App() {
         alert('188');
       });
   }
-  
 
-  function handlerLogOut() {
-    mainApi.logout()
-    .then((res) => {
-      navigate('/sign-in');
-      setLoggedIn(false);
-      console.log(loggedIn);
-      setCurrentUser({});
-      setCurrentWeek({});
-      localStorage.setItem("loggedIn", false);
-    })
-    .catch((err) => {
-      alert(err);
-      alert('205');
-    });
-  }
-
-  function handleError(error) {
-    alert(error, '196');
-    console.log('196')
+  function handleError() {
     setLoggedIn(false);
-    console.log(loggedIn);
     setCurrentWeek({});
     localStorage.setItem("loggedIn", false);
+  }
+
+  function handlerChooseEvent(event, i) {
+    console.log(event, i)
+    setChoosenEvent(event);
+    setNumberChoosenEvent(i);
+    setDeleteEvent(true);
   }
 
   function setPrevWeek() {
@@ -215,6 +158,59 @@ function App() {
 
   function setNextWeek() {
     setCurrentWeek(isCurrentWeek.map(day => addDays(7, day)));
+  }
+
+  function handlerCancelEventClose() {
+    setAddEvent(false);
+  }
+
+  function handlerAddEvent(event) {
+    let eventTimeZoneStart = new Date(event.eventDayStart + 'T' + event.eventTimeStart + ':00');
+    let eventTimeZoneStop = new Date(event.eventDayStart + 'T' + event.eventTimeStop + ':00');
+
+    let myStartDate = new Date(eventTimeZoneStart).toISOString();
+    let myStopDate = new Date(eventTimeZoneStop).toISOString();
+
+    let newEvent = `/events?name=${event.eventText}&start=${myStartDate.split('.')[0]}Z&stop=${myStopDate.split('.')[0]}Z`;
+
+    eventsApi.addEvent(newEvent)
+    .then((newEvent) => {
+      console.log(newEvent);
+      getEvents();
+      setAddEvent(false);
+    })
+    .catch(err =>{
+      alert(err);
+      alert('150');
+    })
+  } 
+
+  function handleDeleteEvent(status) {
+    if(status) {
+      eventsApi.deletEvent(choosenEvent.id)
+      .then(() => {
+        setEvents(events => events.filter(event => event.id != choosenEvent.id));
+        setDeleteEvent(false);
+      })
+      .catch(err => {
+        alert(err);
+        alert('130');
+      });
+    }
+  }
+  
+  function handlerLogOut() {
+    mainApi.logout()
+    .then((res) => {
+      navigate('/sign-in');
+      setLoggedIn(false);
+      setCurrentUser({});
+      localStorage.setItem("loggedIn", false);
+    })
+    .catch((err) => {
+      alert(err);
+      alert('205');
+    });
   }
 
   return (
@@ -226,8 +222,8 @@ function App() {
           <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
             <Route path='/' element={(
               <>
-                <Header onEddEvent={handlerAddEventOpen} onLogOut={handlerLogOut} />
-                <Main
+              <Header onAddEvent={handlerAddEventOpen} onLogOut={handlerLogOut} />
+              <Main
                   onDeleteEvent={handlerChooseEvent}
                   currentDay={now.getDate()}
                   currentWeek={isCurrentWeek}
@@ -235,11 +231,11 @@ function App() {
                   onSetPrevWeek={setPrevWeek}
                   onSetNextWeek={setNextWeek} />
                 <Footer onDeleteEventFooter={handleDeleteEvent} isShowDeleteButton={isDeleteEvent} />
+               
               </>)}>
             </Route>
           </Route>
         </Routes>
-
         <AddEventPopup onClose={handlerCancelEventClose} onAddEvent={handlerAddEvent} isOpen={isAddEvent}/>
       </div>
     </CurrenUserContext.Provider>

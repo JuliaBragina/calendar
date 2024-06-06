@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
-import addButtonImg from '../images/add-button.svg'
-import logOutButtonImg from '../images/logout-button.svg'
+import addButtonImg from '../images/add-button.svg';
+import logoutButtonImg from '../images/logout-button.svg';
 
 const ContainerHeader = styled.header`
   margin: 0 auto;
@@ -26,10 +26,10 @@ const HeaderButtons = styled.div`
 `
 const HeaderButton = styled.button`
   background-size: 100%;
-  background-position:  center;
+  background-position: center;
   background-repeat: no-repeat;
   background-color: transparent;
-  background-image: url('${props => props.url}');
+  background-image: url('${props => props.$url}');
   border: 0;
   height: 30px;
   width: 30px;
@@ -37,13 +37,13 @@ const HeaderButton = styled.button`
   cursor: pointer;
 `
 
-function Header({onEddEvent, onLogOut}) {
-  return(
-    <ContainerHeader> 
+function Header({ onAddEvent, onLogOut }) {
+  return (
+    <ContainerHeader>
       <HeaderTitle>Interview Calendar</HeaderTitle>
       <HeaderButtons>
-        <HeaderButton url={addButtonImg} type="submit" onClick={onEddEvent}></HeaderButton>
-        <HeaderButton url={logOutButtonImg} type="submit" onClick={onLogOut}></HeaderButton>
+        <HeaderButton $url={addButtonImg} type='button' onClick={onAddEvent}></HeaderButton>
+        <HeaderButton $url={logoutButtonImg} type='button' onClick={onLogOut}></HeaderButton>
       </HeaderButtons>
     </ContainerHeader>
   )
