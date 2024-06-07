@@ -1,7 +1,7 @@
 {
   "name": "interview-calendar",
   "version": "0.1.0",
-  "homepage": "https://juliabragina.github.io/calendar/",
+  "homepage": "https://juliabragina.github.io/calendar",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.24.6",
@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^6.1.1",
     "json-server": "^1.0.0-beta.0"
   }
 }
