@@ -20,6 +20,8 @@ let events = [
 export function makeServer() {
   return createServer({
     routes() {
+      
+      this.passthrough();
       this.namespace = 'api';
 
       // Users routes
