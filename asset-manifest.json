@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/calendar/static/css/main.dcf3df15.css",
+    "main.js": "/calendar/static/js/main.15d85c1c.js",
+    "static/media/Inter-Medium.woff": "/calendar/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
+    "static/media/Inter-Black.woff": "/calendar/static/media/Inter-Black.c6938660eec019fefd68.woff",
+    "static/media/Inter-Regular.woff": "/calendar/static/media/Inter-Regular.8c206db99195777c6769.woff",
+    "static/media/Inter-Medium.woff2": "/calendar/static/media/Inter-Medium.293fd13dbca5a3e450ef.woff2",
+    "static/media/Inter-Black.woff2": "/calendar/static/media/Inter-Black.15ca31c0a2a68f76d2d1.woff2",
+    "static/media/Inter-Regular.woff2": "/calendar/static/media/Inter-Regular.c8ba52b05a9ef10f4758.woff2",
+    "static/media/logout-button.svg": "/calendar/static/media/logout-button.2b076ccb477b3f028fe050c345f36df5.svg",
+    "static/media/add-button.svg": "/calendar/static/media/add-button.a5fe5028c34ad0054d067d337957b87f.svg",
+    "index.html": "/calendar/index.html",
+    "static/media/left-button.svg": "/calendar/static/media/left-button.98279d5840fe6549acc051058b959e8d.svg",
+    "static/media/rigth-button.svg": "/calendar/static/media/rigth-button.e7241d239949c98233c5942d97ad8223.svg",
+    "main.dcf3df15.css.map": "/calendar/static/css/main.dcf3df15.css.map",
+    "main.15d85c1c.js.map": "/calendar/static/js/main.15d85c1c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dcf3df15.css",
+    "static/js/main.15d85c1c.js"
+  ]
+}
