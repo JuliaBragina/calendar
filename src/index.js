@@ -17,7 +17,6 @@ const RootContainer = styled.div`
   color: #000;
   position: relative;
 `
-//background-color: #fff;
 
 makeServer();
 
@@ -25,7 +24,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RootContainer>
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename="/calendar">
         <App />
       </BrowserRouter>
     </React.StrictMode>
