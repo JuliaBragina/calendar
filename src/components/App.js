@@ -11,6 +11,7 @@ import eventsApi from '../utils/EventsApi';
 import mainApi from '../utils/MainApi';
 import ProtectedRoute from './ProtectedRoute'
 import { CurrenUserContext } from '../contexts/CurrentUserContext';
+import MainContainer from './MainContainer';
 
 function App() {  
   let now = new Date();
@@ -55,11 +56,11 @@ function App() {
     localStorage.setItem('events', JSON.stringify(isEvents));
   }, [isEvents]);
 
-  /*useEffect(() => {
+  useEffect(() => {
     if(isCurrentWeek.length !== 0 && loggedIn) {
       getEvents();
     }
-  }, [isCurrentWeek]);*/
+  }, [isCurrentWeek]);
 
   function getEvents() {
     const periodTime = {
@@ -217,26 +218,23 @@ function App() {
     <CurrenUserContext.Provider value={currenUser}>
       <div className="app">
         <Routes>
-          <Route path='/sign-in' element={<Login onLoginUser={handleLoginUser} onLoading={isLoading} />}></Route>
-          <Route path='/sign-up' element={<Register onRegisterUser={handleRegisterUser} />}></Route>
-          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-            <Route path='/' element={(
-              <>
-              <Header onAddEvent={handlerAddEventOpen} onLogOut={handlerLogOut} />
-              <Main
-                  onDeleteEvent={handlerChooseEvent}
-                  currentDay={now.getDate()}
-                  currentWeek={isCurrentWeek}
-                  events={isEvents}
-                  onSetPrevWeek={setPrevWeek}
-                  onSetNextWeek={setNextWeek} />
-                <Footer onDeleteEventFooter={handleDeleteEvent} isShowDeleteButton={isDeleteEvent} />
-               
-              </>)}>
-            </Route>
-          </Route>
+          <Route path="/sign-in" element={<Login onLoginUser={handleLoginUser} onLoading={isLoading} />} />
+          <Route path="/sign-up" element={<Register onRegisterUser={handleRegisterUser} />} />
+          <Route path="/" element={<MainContainer 
+            onAddEvent={handlerAddEventOpen}
+            onLogOut={handlerLogOut}
+            onDeleteEventFooter={handleDeleteEvent}
+            isShowDeleteButton={isDeleteEvent}
+            loggedIn={loggedIn}
+            onDeleteEvent={handlerChooseEvent}
+            currentDay={now.getDate()}
+            currentWeek={isCurrentWeek}
+            events={isEvents}
+            onSetPrevWeek={setPrevWeek}
+            onSetNextWeek={setNextWeek}/>} 
+          />
         </Routes>
-        <AddEventPopup onClose={handlerCancelEventClose} onAddEvent={handlerAddEvent} isOpen={isAddEvent}/>
+        <AddEventPopup onClose={handlerCancelEventClose} onAddEvent={handlerAddEvent} isOpen={isAddEvent} />
       </div>
     </CurrenUserContext.Provider>
   );
