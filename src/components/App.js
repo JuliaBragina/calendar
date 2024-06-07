@@ -12,6 +12,7 @@ import mainApi from '../utils/MainApi';
 import ProtectedRoute from './ProtectedRoute'
 import { CurrenUserContext } from '../contexts/CurrentUserContext';
 import MainContainer from './MainContainer';
+import NotFound from './NotFound';
 
 function App() {  
   let now = new Date();
@@ -239,6 +240,7 @@ function App() {
             onSetPrevWeek={setPrevWeek}
             onSetNextWeek={setNextWeek}/>} 
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <AddEventPopup onClose={handlerCancelEventClose} onAddEvent={handlerAddEvent} isOpen={isAddEvent} />
       </div>
