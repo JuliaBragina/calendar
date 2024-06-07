@@ -62,6 +62,12 @@ function App() {
     }
   }, [isCurrentWeek]);
 
+  useEffect(() => {
+    if (!loggedIn) {
+      navigate('/sign-in');
+    }
+  }, [loggedIn, navigate]);
+
   function getEvents() {
     const periodTime = {
       startTime: '00:00:01',
