@@ -24,10 +24,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build -r git@github.com:JuliaBragina/calendar.git",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deployServer": "npm run build && scp -r ./build/* ssh root@82.148.30.58:/root/frontend",
     "start:server": "json-server --watch db.json --port 3001"
   },
   "eslintConfig": {
