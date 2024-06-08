@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/calendar/static/css/main.dcf3df15.css",
-    "main.js": "/calendar/static/js/main.1ebf3c4c.js",
+    "main.js": "/calendar/static/js/main.f906b2e0.js",
     "static/media/Inter-Medium.woff": "/calendar/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
     "static/media/Inter-Black.woff": "/calendar/static/media/Inter-Black.c6938660eec019fefd68.woff",
     "static/media/Inter-Regular.woff": "/calendar/static/media/Inter-Regular.8c206db99195777c6769.woff",
@@ -14,10 +14,10 @@
     "static/media/left-button.svg": "/calendar/static/media/left-button.98279d5840fe6549acc051058b959e8d.svg",
     "static/media/rigth-button.svg": "/calendar/static/media/rigth-button.e7241d239949c98233c5942d97ad8223.svg",
     "main.dcf3df15.css.map": "/calendar/static/css/main.dcf3df15.css.map",
-    "main.1ebf3c4c.js.map": "/calendar/static/js/main.1ebf3c4c.js.map"
+    "main.f906b2e0.js.map": "/calendar/static/js/main.f906b2e0.js.map"
   },
   "entrypoints": [
     "static/css/main.dcf3df15.css",
-    "static/js/main.1ebf3c4c.js"
+    "static/js/main.f906b2e0.js"
   ]
 }
