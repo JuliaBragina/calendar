@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Event2 from "./Event2";
+import Event from "./Event";
 import styled from "styled-components";
 
 const TimeLineContainer = styled.section`
@@ -61,7 +61,7 @@ function TimeLine({ onDeleteEvent, events }) {
       </TimeLineTime>
       <TimeLineEvent>
         {
-          events.map(event => (<Event2 key={event.id} day={event.start.getDay()} event={event} onDeleteEvent={onDeleteEvent}/>))
+          events.map(event => (<Event key={event.id} day={event.start.getDay()} event={event} onDeleteEvent={onDeleteEvent}/>))
         }
       </TimeLineEvent>
     </TimeLineContainer>

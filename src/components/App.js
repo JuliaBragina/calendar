@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Header from './Header';
-import Main from './Main';
-import Footer from './Footer';
 import Login from './Login';
 import Register from './Register';
 import AddEventPopup from './AddEventPopup';
@@ -21,10 +18,9 @@ function App() {
   const [isDeleteEvent, setDeleteEvent] = useState(false);
   const [isEvents, setEvents] = useState([]);
   const [choosenEvent, setChoosenEvent] = useState({});
-  const [numberChoosenEvent, setNumberChoosenEvent] = useState(0);
   const [isLoading, setLoading] = useState(false);
   const [currenUser, setCurrentUser] = useState({});  
-  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn').toLowerCase() == 'true' : false);
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn').toLowerCase() === 'true' : false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,12 +59,6 @@ function App() {
     }
   }, [isCurrentWeek]);
 
-  useEffect(() => {
-    if (!loggedIn) {
-      navigate('/sign-in');
-    }
-  }, [loggedIn, navigate]);
-
   function getEvents() {
     const periodTime = {
       startTime: '00:00:01',
@@ -93,6 +83,7 @@ function App() {
   }
 
   function handleLoginUser(data) {
+    setLoading(true);
     mainApi.login(data.login, data.pass)
     .then((newUser) => {
       if(newUser) {
@@ -106,7 +97,9 @@ function App() {
     })
     .catch((err) => {
       alert(err);
-      alert('170');
+    })
+    .finally(()=>{
+      setLoading(false);
     });
   }
 
@@ -129,7 +122,6 @@ function App() {
 
   function handlerAddEventOpen() {
     setAddEvent(true);
-    console.log('vdvvdr')
   }
   
   function handleRegisterUser(data) {
@@ -154,9 +146,7 @@ function App() {
   }
 
   function handlerChooseEvent(event, i) {
-    console.log(event, i)
     setChoosenEvent(event);
-    setNumberChoosenEvent(i);
     setDeleteEvent(true);
   }
 
@@ -183,13 +173,11 @@ function App() {
 
     eventsApi.addEvent(newEvent)
     .then((newEvent) => {
-      console.log(newEvent);
       getEvents();
       setAddEvent(false);
     })
     .catch(err =>{
       alert(err);
-      alert('150');
     })
   } 
 
@@ -202,7 +190,6 @@ function App() {
       })
       .catch(err => {
         alert(err);
-        alert('130');
       });
     }
   }
@@ -217,7 +204,6 @@ function App() {
     })
     .catch((err) => {
       alert(err);
-      alert('205');
     });
   }
 
@@ -227,19 +213,21 @@ function App() {
         <Routes>
           <Route path="/sign-in" element={<Login onLoginUser={handleLoginUser} onLoading={isLoading} />} />
           <Route path="/sign-up" element={<Register onRegisterUser={handleRegisterUser} />} />
-          <Route path="/" element={<MainContainer 
-            onAddEvent={handlerAddEventOpen}
-            onLogOut={handlerLogOut}
-            onDeleteEventFooter={handleDeleteEvent}
-            isShowDeleteButton={isDeleteEvent}
-            loggedIn={loggedIn}
-            onDeleteEvent={handlerChooseEvent}
-            currentDay={now.getDate()}
-            currentWeek={isCurrentWeek}
-            events={isEvents}
-            onSetPrevWeek={setPrevWeek}
-            onSetNextWeek={setNextWeek}/>} 
-          />
+          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route path="/" element={<MainContainer
+              onAddEvent={handlerAddEventOpen}
+              onLogOut={handlerLogOut}
+              onDeleteEventFooter={handleDeleteEvent}
+              isShowDeleteButton={isDeleteEvent}
+              loggedIn={loggedIn}
+              onDeleteEvent={handlerChooseEvent}
+              currentDay={now.getDate()}
+              currentWeek={isCurrentWeek}
+              events={isEvents}
+              onSetPrevWeek={setPrevWeek}
+              onSetNextWeek={setNextWeek}
+            />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <AddEventPopup onClose={handlerCancelEventClose} onAddEvent={handlerAddEvent} isOpen={isAddEvent} />

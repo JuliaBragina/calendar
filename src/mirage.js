@@ -1,7 +1,7 @@
 import { createServer, Response } from 'miragejs';
 
 let users = [
-  { id: '1', name: 'John Doe', login: 'john', pass: '12345' }
+  { id: '1', name: 'Julia', login: 'julia@yandex.ru', pass: '12345' }
 ];
 
 let events = [
@@ -20,8 +20,6 @@ let events = [
 export function makeServer() {
   return createServer({
     routes() {
-      
-      this.passthrough();
       this.namespace = 'api';
 
       // Users routes
@@ -32,7 +30,7 @@ export function makeServer() {
         }
         let newUser = { id: String(users.length + 1), ...attrs };
         users.push(newUser);
-        return { user: newUser };
+        return { newUser };
       });
 
       this.post('/signin', (schema, request) => {

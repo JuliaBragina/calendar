@@ -28,7 +28,6 @@ class EventsApi {
   }
 
   deletEvent(eventId) {
-    //events?id=7
     return fetch (this._url + `/events?id=${eventId}`, {
       method: 'DELETE',
       credentials: 'include',

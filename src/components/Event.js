@@ -1,37 +1,21 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-const EventItem = styled.div`
+const Event2Item = styled.div`
   box-sizing: border-box;
-  border: 1px rgb(230, 230, 230) solid;
-  height: 30px;
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-const EventItemIsEvent = styled.div`
+  width: calc(99% / 7);
+  height: ${props => props.$height}px;
+  background: rgb(62, 66, 117);
+
   cursor: pointer;
   position: absolute;
-  top: ${props => props.$top}%;;
-  left: ${props => props.$left}%;
-  width: ${props => props.$width}%;
-  height: ${props => props.$height}%;
-  box-sizing: border-box;
+  top: ${props => props.$top}px;
+  left: ${props => props.$left * (100 / 7)}%;
+  max-width: calc(99% / 7);
+  overflow: hidden;
 
-  &::before {
-    content: "";
-    position: absolute;
-    bottom: 5%;
-    left: 2%;
-    width: 96%;
-    height: 90%;
-    z-index: -1;
-    border-radius: 2px;
-    background: rgb(62, 66, 117);
-  }
-
-  &:hover::before {
-    background: rgb(11, 11, 18);
+  &:hover {
+    background: rgb(255, 49, 49);
   }
 `;
 const EventItemIsEventText = styled.p`
@@ -46,42 +30,20 @@ const EventItemIsEventText = styled.p`
   color: #fff;
 `;
 
-function Event({ event, onDeleteEvent }) {
-  const eventCount = Object.keys(event.events).length;
-  const eventWidth = 100 / eventCount;
-
-  function handleDeleteEvent(i) {
-    onDeleteEvent(event.events, i);
+function Event({event, day, onDeleteEvent }) {
+  function handleDeleteEvent(event, i) {
+    onDeleteEvent(event, i);
   }
-
-  function makeObj() {
-    let massEvents = [];
-    for(let i = 0; i < Object.keys(event.events).length; i++) {
-      massEvents.push(event.events[i]);
-    }
-    return massEvents;
-  }
-
-  //height={100 - item.start.toISOString().split(':')[1] * 100 / 60}
 
   return (
-    <EventItem>
-      {eventCount <= 0 ? (
-        <EventItemIsEvent ></EventItemIsEvent>
-      ) : (
-        makeObj().map((item, i) => (
-          <EventItemIsEvent
-            key={item.id}
-            $left={eventWidth * i}
-            $top={0}
-            $width={eventWidth}
-            onClick={() => handleDeleteEvent(i)}
-          >
-            <EventItemIsEventText>{item.name}</EventItemIsEventText>
-          </EventItemIsEvent>
-        ))
-      )}
-    </EventItem>
+    <Event2Item
+      key={event.id}
+      $top={30 * ((event.start.getHours()) + (event.start.getMinutes() / 60))}
+      $left={day}
+      $height={((event.stop.getHours() * 60) + (event.stop.getMinutes()) - (event.start.getHours() * 60) + (event.start.getMinutes())) / 2}
+      onClick={() => handleDeleteEvent(event, event.id)} >
+      <EventItemIsEventText>{event.name}</EventItemIsEventText>
+    </Event2Item>
   );
 }
 

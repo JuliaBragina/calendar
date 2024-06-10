@@ -13,25 +13,25 @@ const AddEventPopupContainer = styled.div`
   height: 28%;
 `
 const AddEventPopupFrom = styled.form`
-width: 100%;
-height: 100%;
-background: rgb(230,230,231);
-border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  background: rgb(230,230,231);
+  border-radius: 10px;
 `
 const AddEventPopupTitle = styled.h2`
-font-family: 'Inter', Arial, sans-serif;
-font-weight: 400;
-font-size: 20px;
-line-height: 22px;
-margin: 0;
-text-align: center;
-padding: 15px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 22px;
+  margin: 0;
+  text-align: center;
+  padding: 15px;
 `
 const AddEventPopupFromContainer = styled.div`
-display: flex;
-justify-content: space-between;
-flex-direction: column;
-height: 60%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 60%;
 `
 const AddEventPopupSection = styled.section`
   display: flex;
@@ -41,86 +41,86 @@ const AddEventPopupSection = styled.section`
   margin: 0 auto;
 `
 const AddEventPopupDescription = styled.p`
-margin: 0;
-flex-basis: 20%;
-font-family: 'Inter', Arial, sans-serif;
-font-weight: 400;
-font-size: 14px;
-line-height: 14px;
-margin: 0;
+  margin: 0;
+  flex-basis: 20%;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  margin: 0;
 `
 const AddEventPopupDescriptionTitle = styled.h3`
-font-family: 'Inter', Arial, sans-serif;
-font-weight: 400;
-font-size: 16px;
-line-height: 16px;
-margin: 0 auto;
-width: 90%;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  margin: 0 auto;
+  width: 90%;
 `
 const AddEventPopupDescriptionPeriodTime = styled.div`
-display: flex;
-width: 90%;
-margin: 0 auto;
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
 `
 const AddEventPopupFromInput = styled.input`
-width: 80%;
-display: block;
-margin: 0 auto;
-font-family: 'Inter', Arial, sans-serif;
-font-weight: 400;
-font-size: 12px;
-line-height: 12px;
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 12px;
 
 `
 const AddEventPopupFromInputTime = styled.input`
-width: 80%;
-display: block;
-margin: 0 auto;
-font-family: 'Inter', Arial, sans-serif;
-font-weight: 400;
-font-size: 12px;
-line-height: 12px;
-margin-right: 20px;
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 12px;
+  margin-right: 20px;
 
-&:last-of-type{
-  margin-right: 0;
-}
+  &:last-of-type{
+    margin-right: 0;
+  }
 `
 const AddEventPopupButtons = styled.div`
-margin-top: 15px;
+  margin-top: 15px;
 `
 const AddEventPopupButtonsCancel = styled.button`
-border: 0;
-background-color: transparent;
-cursor: pointer;
-width: 50%;
-padding: 0;
-height: 43px;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  width: 50%;
+  padding: 0;
+  height: 43px;
 
-border-radius: 0 0 0 10px;
-border-top: 1px rgb(105,105,125) solid;
-border-right: 1px rgb(105,105,125) solid;
-box-sizing: border-box;
+  border-radius: 0 0 0 10px;
+  border-top: 1px rgb(105,105,125) solid;
+  border-right: 1px rgb(105,105,125) solid;
+  box-sizing: border-box;
 
-&:hover {
-  opacity: .5;
-}
+  &:hover {
+    opacity: .5;
+  }
 `
 const AddEventPopupButtonsOk = styled.button`
-border: 0;
-background-color: transparent;
-cursor: pointer;
-width: 50%;
-padding: 0;
-height: 43px;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  width: 50%;
+  padding: 0;
+  height: 43px;
 
-border-radius: 0 0 10px 0;
-border-top: 1px rgb(105,105,125) solid;
-box-sizing: border-box;
+  border-radius: 0 0 10px 0;
+  border-top: 1px rgb(105,105,125) solid;
+  box-sizing: border-box;
 
-&:hover {
-  opacity: .5;
-}
+  &:hover {
+    opacity: .5;
+  }
 `
 function AddEventPopup({isOpen, onClose, onAddEvent}) {
   const [eventText, setEventText] = useState('');
