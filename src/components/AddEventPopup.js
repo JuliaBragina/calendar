@@ -1,6 +1,17 @@
 import { useState } from "react";
 import * as React from 'react';
 import styled from "styled-components";
+import { joiResolver } from '@hookform/resolvers/joi';
+import { useForm } from "react-hook-form"; 
+import Joi from "joi";
+
+const schema = Joi.object({
+  text: Joi.string().min(2).max(30).required(),
+  startDay: Joi.date().iso().required(),
+  startTime: Joi.string().regex(/^\d{2}:\d{2}$/).required(),
+  endTime: Joi.string().regex(/^\d{2}:\d{2}$/).required(),
+}).required();
+
 
 const AddEventPopupContainer = styled.div`
   display: ${(props) => props.$isOpen ? 'block' : 'none'};
@@ -121,8 +132,19 @@ const AddEventPopupButtonsOk = styled.button`
   &:hover {
     opacity: .5;
   }
+
+  &:disabled {
+    opacity: 0.4;
+    box-shadow: 0 0 0;
+    cursor: default;
+  }
 `
 function AddEventPopup({isOpen, onClose, onAddEvent}) {
+  const { register, formState: {errors, isValid} } = useForm({
+    mode: 'all',
+    resolver: joiResolver(schema)
+  });
+
   const [eventText, setEventText] = useState('');
   const [eventDayStart, setventDayStart] = useState('');
   const [eventTimeStart, setEventTimeStart] = useState('');
@@ -157,7 +179,8 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
           <AddEventPopupFromContainer>
             <AddEventPopupSection>
               <AddEventPopupDescription >Enter descr</AddEventPopupDescription>
-              <AddEventPopupFromInput 
+              <AddEventPopupFromInput
+                {...register("text")} 
                 type="text"
                 name="text"
                 autoComplete="off"
@@ -169,6 +192,7 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
             <AddEventPopupSection>
               <AddEventPopupDescription >Enter day</AddEventPopupDescription>
               <AddEventPopupFromInput 
+                {...register("startDay")} 
                 type="date"
                 name="startDay"
                 autoComplete="off"
@@ -183,8 +207,9 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
               <AddEventPopupSection>
                 <AddEventPopupDescription >from</AddEventPopupDescription>
                   <AddEventPopupFromInputTime 
+                    {...register("startTime")} 
                     type="time"
-                    name="timeStart"
+                    name="startTime"
                     autoComplete="off"
                     value={eventTimeStart || ""}
                     onChange={handlerChangeTimeStart}
@@ -194,8 +219,9 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
               <AddEventPopupSection>
                 <AddEventPopupDescription >to</AddEventPopupDescription>
                   <AddEventPopupFromInputTime 
+                    {...register("endTime")} 
                     type="time"
-                    name="startTime"
+                    name="endTime"
                     autoComplete="off"
                     value={eventTimeStop || ""}
                     onChange={handlerChangeTimeStop}
@@ -207,7 +233,7 @@ function AddEventPopup({isOpen, onClose, onAddEvent}) {
 
         <AddEventPopupButtons>
           <AddEventPopupButtonsCancel type="button" onClick={onClose}>Cancel</AddEventPopupButtonsCancel>
-          <AddEventPopupButtonsOk type="submit">OK</AddEventPopupButtonsOk>
+          <AddEventPopupButtonsOk disabled={!isValid} type="submit">OK</AddEventPopupButtonsOk>
         </AddEventPopupButtons>
       </AddEventPopupFrom>
     </AddEventPopupContainer>
